@@ -1,7 +1,12 @@
 package com.mq.consumer;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
 
 import javax.jms.Connection;
 import javax.jms.Destination;
@@ -14,112 +19,137 @@ import javax.jms.TextMessage;
 
 import org.apache.activemq.command.ActiveMQQueue;
 
-import com.mq.ehcache.MQCache;
+import com.mq.rest.BatchMessageFormat;
 import com.mq.rest.MessageFormat;
-import com.mq.util.CacheObject;
 import com.mq.util.ConnectionUtil;
-import com.mq.util.PropertyUtil;
+
 
 
 public class Consumer {
 	
  
-    public MessageFormat getConsumeMsg(String clientId)	throws Exception {
-		MessageFormat msgFormat = new MessageFormat();
-		msgFormat.setMessage("NO Message in MQ");
-		Connection qC = ConnectionUtil.getConnection();
-		qC.start();
-		Destination destination = null;
-		Session session = qC.createSession(true,-1);
-		if (clientId.equalsIgnoreCase("100")) {
-			destination = session.createQueue("pwp-queue");
-		} else if (clientId.equalsIgnoreCase("101")) {
-			destination = session.createQueue("pwc-queue");
-		} else if (clientId.equalsIgnoreCase("102")) {
-			destination = session.createQueue("iship-queue");
-		}else if (clientId.equalsIgnoreCase("103")) {
-			destination = session.createQueue("solr-queue");
-		}else if (clientId.equalsIgnoreCase("104")) {
-			destination = session.createQueue("kettle-queue");
-		}else if (clientId.equalsIgnoreCase("105")) {
-			destination = session.createQueue("abacus-queue");
-		}else if (clientId.equalsIgnoreCase("106")) {
-			destination = session.createQueue("bigdata-queue");
+	public BatchMessageFormat getConsumeMsg(final String clientId, final Integer batchSize)	throws Exception {
+		BatchMessageFormat batchmsgFormat = new BatchMessageFormat();
+		List<MessageFormat> msgdetails = new ArrayList<MessageFormat>();
+		List<Future<MessageFormat>> futuremsgdetails = new ArrayList<Future<MessageFormat>>();
+		  
+		if (batchSize != null) {
+			Integer msgCount = getMsgCount(clientId, batchSize);
+			for (int batchconnect = 0; batchconnect <msgCount; batchconnect++) {
+				FutureTask<MessageFormat> task = new FutureTask<MessageFormat>(new Callable<MessageFormat>() {
+					@Override
+					public MessageFormat call() throws Exception {
+						MessageFormat msg=consumeBatchMsg(clientId,batchSize);
+						return msg;
+						
+					}
+				});
+				
+				futuremsgdetails.add(task);
+				Thread t = new Thread(task);
+				t.start();
+			}	
+			
+			for(Future<MessageFormat> msg:futuremsgdetails){
+				if(msg.get()!=null && msg.get().getMessageID()!=null){
+				msgdetails.add(msg.get());
+				}else{
+					MessageFormat dummyMsg= new MessageFormat();
+					dummyMsg.setMessageID("000000");
+					dummyMsg.setMessage("No Message in Queue");
+					msgdetails.add(dummyMsg);
+					break;
+				}
+			}
+			batchmsgFormat.setMsgDetails(msgdetails);
+				
 		}else{
-			destination = session.createQueue("test-queue");
+			MessageFormat msgFormat = new MessageFormat();
+			msgFormat.setMessage("NO Message in MQ");
+			Connection qC = ConnectionUtil.getConnection();
+			qC.start();
+			Session session = qC.createSession(false, Session.AUTO_ACKNOWLEDGE);
+			Destination destination = createQueue(clientId, session);
+			MessageConsumer consumer = session.createConsumer(destination);
+
+			Message message = consumer.receive(2000);
+			if (message!=null || message instanceof TextMessage)  {
+				TextMessage textMessage = (TextMessage) message;
+				msgFormat.setMessageID(textMessage.getJMSMessageID());
+				msgFormat.setMessage(textMessage.getText());
+				msgdetails.add(msgFormat);
+			
+				
+				
+			}else{
+				MessageFormat dummyMsg= new MessageFormat();
+				dummyMsg.setMessageID("000000");
+				dummyMsg.setMessage("No Message in Queue");
+				msgdetails.add(dummyMsg);
+			
+			}
+			batchmsgFormat.setMsgDetails(msgdetails);
+			consumer.close();
 		}
-		MessageConsumer consumer = session.createConsumer(destination);
-		Message message = consumer.receive();
-		if (message instanceof TextMessage) {
-			TextMessage textMessage = (TextMessage) message;
-			msgFormat.setMessageID(textMessage.getJMSMessageID());
-			msgFormat.setMessage(textMessage.getText());
-			
-			CacheObject cacheValue = new CacheObject();
-			cacheValue.setConnection(qC);
-			cacheValue.setSession(session);
-			cacheValue.setJmsQueue(destination);
-			
-			MQCache.instance().add(textMessage.getJMSMessageID(), cacheValue);
-			//CacheAdaptor.instance().loadCache(textMessage.getJMSMessageID(), cacheValue);
-			return msgFormat;
-		}		
-		consumer.close();
-		return msgFormat;
+		
+		return batchmsgFormat;
 	}
 
-    public String getMsgCount(String clientId)	throws JMSException, IOException {
-  		String numMsg="NONE FOUND";
-    	Connection qC = ConnectionUtil.getConnection();
+    public  Integer getMsgCount(final String clientId,final Integer batchMsgCount)	throws JMSException, IOException {
+  		Connection qC = ConnectionUtil.getConnection();
   		qC.start();
   		Session session = qC.createSession(false,Session.AUTO_ACKNOWLEDGE);
-  		ActiveMQQueue queue=new ActiveMQQueue();
-  		if (clientId.equalsIgnoreCase("100")) {
-  			queue.setPhysicalName("pwp-queue");
-  		} else if (clientId.equalsIgnoreCase("101")) {
-  			queue.setPhysicalName("pwc-queue");
-  		} else if (clientId.equalsIgnoreCase("102")) {
-  			queue.setPhysicalName("iship-queue");
-  		}
-		QueueBrowser queueBrowser = session.createBrowser(queue);
-		Enumeration e = queueBrowser.getEnumeration();
+  		ActiveMQQueue queue=checkQueue(clientId);
+  		QueueBrowser queueBrowser = session.createBrowser(queue);
+		Enumeration<?> e = queueBrowser.getEnumeration();
 		int numMsgs = 0;
 		while (e.hasMoreElements()) {
-			Message message = (Message) e.nextElement();
 			numMsgs++;
+			if (batchMsgCount != null && numMsgs == batchMsgCount) {
+				break;
+			}
 		}
-		numMsg = "FOUND : " + numMsgs;
 		queueBrowser.close();
 		session.close();
 		qC.close();
-		return numMsg;
+		return numMsgs;
 	}
     
-    public String getACK(String clientId,String msgId,String ack)throws JMSException{
-    	
-    	if(MQCache.instance().get(msgId)!=null){
-      	Connection connection = MQCache.instance().get(msgId).getConnection();
-      	Session session = MQCache.instance().get(msgId).getSession();
-		MessageConsumer consumer = session.createConsumer(MQCache.instance().get(msgId).getJmsQueue());
-		if (ack.equalsIgnoreCase("SUCCESS")) {
-			Message message = consumer.receive();
-			if (message instanceof TextMessage) {
-				TextMessage textMessage = (TextMessage) message;
-				PropertyUtil.writeToFile(clientId, textMessage.getJMSMessageID(), textMessage.getText());
-			}
-			session.commit();
-		} else {
-			session.rollback();
-		}		
-		session.close();
-		connection.close();
-		MQCache.instance().evictCache(msgId);
-		return "Accepted";
-    	}else{
-    		return "Rejected";
-    	}
-    	
+	
+
+  private  MessageFormat consumeBatchMsg(final String clientId, final Integer batchSize) throws JMSException, IOException{
+		MessageFormat msgFormat= new MessageFormat();
+		Connection qC = ConnectionUtil.getBatchConsumerConnection();
+		qC.start();
+		Session session = qC.createSession(false, Session.AUTO_ACKNOWLEDGE);
+		Destination destination = createQueue(clientId, session);
+		MessageConsumer consumer = session.createConsumer(destination);
+
+		Message message = consumer.receive(2000);
+		if (message!=null || message instanceof TextMessage) {
+			TextMessage textMessage = (TextMessage) message;
+			msgFormat.setMessageID(textMessage.getJMSMessageID());
+			msgFormat.setMessage(textMessage.getText());
+		}
+		consumer.close();						
+
+	return msgFormat;
     }
+    
+   
+  
+  public Destination createQueue(final String clientId,final Session session) throws JMSException{
+       	Destination destination = session.createQueue(clientId+"-queue");
+		return destination;	
+     }
+    
+ private  ActiveMQQueue checkQueue(final String clientId) throws JMSException{
+    	ActiveMQQueue queue = new ActiveMQQueue();
+		queue.setPhysicalName(clientId+"-queue");
+		return queue;	
+     }
+ 
+ 
 }
 
 

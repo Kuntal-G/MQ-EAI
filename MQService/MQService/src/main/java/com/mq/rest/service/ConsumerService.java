@@ -1,5 +1,6 @@
 package com.mq.rest.service;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 
 import javax.jms.JMSException;
@@ -10,8 +11,9 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.mq.consumer.BlobMessageConsumer;
 import com.mq.consumer.Consumer;
-import com.mq.rest.MessageFormat;
+import com.mq.rest.BatchMessageFormat;
 
 
 
@@ -21,24 +23,28 @@ public class ConsumerService {
 	@GET
 	@Path("/get-consume")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getConsume(@QueryParam("clientId") String clientId) throws Exception {
-		MessageFormat output = null ;
+	public Response getConsume(@QueryParam("clientId") String clientId,@QueryParam("batchSize") Integer batchSize) throws Exception {
+		BatchMessageFormat output = null ;
 		Consumer cn= new Consumer();
-		if(clientId!=null){
-	    output = cn.getConsumeMsg(clientId);
+		if(null!=clientId){
+	    output = cn.getConsumeMsg(clientId,batchSize);
 		}else{
-			output.setMessage("Client-ID is mandatory");;
+			return Response.status(200).entity("ClientId  is mandatory").build();
 		} 
 		return Response.status(200).entity(output).build();
  	}
 	
 	@GET
 	@Path("/get-msgcount")
-	public Response getMsgCount(@QueryParam("clientId") String clientId) throws JMSException, IOException {
-		String output ="";
+	public Response getMsgCount(@QueryParam("clientId") String clientId,@QueryParam("batchSize") Integer batchSize) throws JMSException, IOException {
+		String output ="Number of Messages : ";
 		Consumer cn= new Consumer();
-		if(clientId!=null){
-	    output = cn.getMsgCount(clientId);
+		if(null!=clientId){
+			if(null!=batchSize){
+	         output =output+ cn.getMsgCount(clientId,batchSize).toString();
+			}else{
+				output =output+ cn.getMsgCount(clientId,null).toString();
+			}
 		}else{
 			output="clientId is mandatory";
 		} 
@@ -47,28 +53,16 @@ public class ConsumerService {
 	
 	
 	@GET
-	@Path("/get-ack")
-	public Response getAcknowlege(@QueryParam("clientId") String clientId,@QueryParam("msgId") String msgId,@QueryParam("ack") String ack) throws JMSException, IOException {
-		String output ="";
-		Consumer cn= new Consumer();
-		if(msgId!=null && ack!=null){
-	    output = cn.getACK(clientId,msgId, ack);
-	    if(output!=null){
-	    	if(output.equalsIgnoreCase("Accepted")){
-	    		output="Thanks for your Acknowledgement";
-	    	return Response.status(200).entity(output).build();
-	    	}else{
-	    		output="Acknowledgement Rejected";
-	    		return Response.status(401).entity(output).build();
-	    		
-	    	}
-	    }
-	    
-		}else{
-			output="ClientId and Acknowlegement are mandatory..";
-		} 
-		return Response.status(200).entity(output).build();
+	@Path("/get-blob")
+	@Produces(MediaType.APPLICATION_OCTET_STREAM)
+	public Response getFile() throws JMSException, IOException {
+		
+		BlobMessageConsumer consumer=new BlobMessageConsumer();
+		FileInputStream fileStream=(FileInputStream) consumer.receiveFile();
+		return Response.status(200).entity(fileStream).build();
  	}
+	
+	
 	
 
 }

@@ -1,4 +1,4 @@
-package com.mq.util;
+package com.mq.consumer;
 
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
@@ -16,12 +16,12 @@ import javax.jms.StreamMessage;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.log4j.Logger;
 
-public class JmsStreamConsumer {
+public class StreamConsumer {
 	private MessageConsumer consumer;
 	private Connection connection = null;
 	private Session session = null;
 	private Destination destination = null;
-	private static Logger logger = Logger.getLogger(JmsStreamConsumer.class);
+	private static Logger logger = Logger.getLogger(StreamConsumer.class);
 	private BufferedOutputStream bos = null;
 
 	private void init(String targetFileName) throws Exception {
@@ -89,7 +89,7 @@ public class JmsStreamConsumer {
 	}
 
 	public static void main(String[] args) {
-		new JmsStreamConsumer().receiveFile("E:\\receive.txt");
+		new StreamConsumer().receiveFile("E:\\receive.txt");
 	}
 
 }

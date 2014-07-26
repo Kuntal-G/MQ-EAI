@@ -1,4 +1,4 @@
-package com.mq.util;
+package com.mq.rest.client;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;

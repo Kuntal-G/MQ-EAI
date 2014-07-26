@@ -1,4 +1,4 @@
-package com.mq.util;
+package com.mq.producer;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,14 +17,14 @@ import javax.jms.StreamMessage;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.log4j.Logger;
 
-public class JmsStreamProducer {
+public class StreamProducer {
 	private Connection connection;
 	private Session session;
 	private Destination destination;
 	private MessageProducer producer;
 	private InputStream in;
 
-	private static Logger logger = Logger.getLogger(JmsStreamProducer.class);
+	private static Logger logger = Logger.getLogger(StreamProducer.class);
 
 	public void sendFile(String fileName) {
 		logger.info("--sendFile start--");
@@ -55,7 +55,7 @@ public class JmsStreamProducer {
 		session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 		destination = session.createQueue("queue1");
 		producer = session.createProducer(destination);
-		// producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
+		producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
 		connection.start();
 	}
 
@@ -78,9 +78,9 @@ public class JmsStreamProducer {
 	}
 
 	public static void main(String argv[]) {
-		ClassLoader loader = JmsStreamProducer.class.getClassLoader();
+		ClassLoader loader = StreamProducer.class.getClassLoader();
 		URL url = loader.getResource("test.txt");
-		new JmsStreamProducer().sendFile(url.getFile());
+		new StreamProducer().sendFile(url.getFile());
 	}
 
 }
