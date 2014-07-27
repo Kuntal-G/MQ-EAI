@@ -35,6 +35,9 @@ public class BlobMessageConsumer {
 				
 			}
 		}
+		consumer.close();
+		session.close();
+		qC.close();
 		return inputStream;
 
 	}

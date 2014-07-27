@@ -1,15 +1,18 @@
 package com.mq.rest.service;
 
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import javax.jms.JMSException;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.StreamingOutput;
 
 import com.mq.consumer.BlobMessageConsumer;
 import com.mq.consumer.Consumer;
@@ -52,17 +55,35 @@ public class ConsumerService {
  	}
 	
 	
+
 	@GET
 	@Path("/get-blob")
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
-	public Response getFile() throws JMSException, IOException {
-		
-		BlobMessageConsumer consumer=new BlobMessageConsumer();
-		FileInputStream fileStream=(FileInputStream) consumer.receiveFile();
-		return Response.status(200).entity(fileStream).build();
- 	}
 	
-	
+	public StreamingOutput getPDF() throws Exception {
+	    return new StreamingOutput() {
+			@Override
+			public void write(OutputStream output) throws IOException,WebApplicationException {
+			try{
+					BlobMessageConsumer consumer=new BlobMessageConsumer();
+					InputStream fileStream= consumer.receiveFile();
+					byte[] buffer = new byte[2048];
+					int length = 0;
+				
+					while ((length = fileStream.read(buffer)) != -1) {
+						output.write(buffer, 0, length);
+					}
+			}catch(JMSException jme){
+				
+			}finally{
+				   output.close();
+		    
+			}
+				
+			}
+				    	
+	    };
+	}
 	
 
 }

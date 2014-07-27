@@ -8,7 +8,7 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 
 public class ConnectionUtil {
 	public static Connection getConnection() throws JMSException {
-		ConnectionFactory connectionFactory = new ActiveMQConnectionFactory(ActiveMQConnectionFactory.DEFAULT_BROKER_URL);
+		ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://localhost:61616");
 		Connection connection = connectionFactory.createConnection();
 		return connection;
 
