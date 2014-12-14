@@ -8,6 +8,7 @@
 	<packaging>pom</packaging>
 	<name>General Message Queue System Master</name>
 
+	
 	<!-- Jar version management -->
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
