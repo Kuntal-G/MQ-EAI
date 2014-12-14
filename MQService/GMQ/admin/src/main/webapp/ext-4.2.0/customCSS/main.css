@@ -1,0 +1,58 @@
+.myEmptyClass{
+	font-style: italic;
+	background-color:#ffffb2;
+	background-image: none;
+	
+}
+.admin {
+	background-image: url(../../images/admin.png) !important;
+	background-size: contain !important;
+	background-repeat :no-repeat !important;		
+}
+ 
+.dashboard {
+    background-image: url(../../images/dashboard.png) !important;
+    background-size: contain !important;
+	background-repeat :no-repeat !important;
+} 
+
+.register {
+    background-image: url(../../images/register.png) !important;
+    background-size: contain !important;
+	background-repeat :no-repeat !important;
+}
+.go {
+    background-image: url(../../images/go.png) !important;
+    background-size: contain !important;
+	background-repeat :no-repeat !important;
+}
+.cancel {
+    background-image: url(../../images/cancel.png) !important;
+    background-size: 18px 18px !important;
+	background-repeat :no-repeat !important;
+}
+.reset {
+    background-image: url(../../images/reset.png) !important;
+    background-size: contain !important;
+	background-repeat :no-repeat !important;
+}
+.add {
+    background-image: url(../../images/add.png) !important;
+    background-size: contain !important;
+	background-repeat :no-repeat !important;
+}
+.key {
+  background-image:url('../../images/key.png') !important;
+  background-size: contain !important;
+	background-repeat :no-repeat !important;
+}
+.logout {
+  background-image:url('../../images/logout.png') !important;
+  background-size: contain !important;
+	background-repeat :no-repeat !important;
+}
+.query {
+  background-image:url('../../images/query.png') !important;
+  background-size: contain !important;
+	background-repeat :no-repeat !important;
+}

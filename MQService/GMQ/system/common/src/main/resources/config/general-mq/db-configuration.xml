@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>  
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="database.name"><![CDATA[${database.name}]]></entry>
+	<entry key="database.driver"><![CDATA[com.mysql.jdbc.Driver]]></entry>
+	<entry key="database.url"><![CDATA[${database.url}]]></entry>
+	<entry key="database.user"><![CDATA[${database.user}]]></entry>
+	<entry key="database.password"><![CDATA[${database.password}]]></entry>
+	<entry key="database.min.connection"><![CDATA[5]]></entry>
+	<entry key="database.max.connection"><![CDATA[10]]></entry>
+	<entry key="database.partition"><![CDATA[1]]></entry>
+	<entry key="database.autocommit"><![CDATA[false]]></entry>
+</properties>

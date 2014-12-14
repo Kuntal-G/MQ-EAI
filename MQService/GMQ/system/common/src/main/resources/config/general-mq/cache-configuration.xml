@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>  
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="cache.host"><![CDATA[${cache.host}]]></entry>
+	<entry key="cache.port"><![CDATA[${cache.port}]]></entry>
+	<entry key="cache.timeout"><![CDATA[5000]]></entry>
+	<entry key="cache.maxActive"><![CDATA[10]]></entry>
+	<entry key="cache.maxIdle"><![CDATA[5]]></entry>
+	<entry key="cache.minIdle"><![CDATA[1]]></entry>
+	<entry key="cache.testOnBorrow"><![CDATA[true]]></entry>
+	<entry key="cache.testOnReturn"><![CDATA[true]]></entry>
+	<entry key="cache.testWhileIdle"><![CDATA[true]]></entry>
+	<entry key="cache.numTestsPerEvictionRun"><![CDATA[10]]></entry>
+	<entry key="cache.timeBetweenEvictionRunsMillis"><![CDATA[60000]]></entry>
+	<entry key="cache.maxWait"><![CDATA[5000]]></entry>
+	<entry key="cache.minEvictableIdleTimeMillis"><![CDATA[1000]]></entry>
+	<entry key="cache.softMinEvictableIdleTimeMillis"><![CDATA[1000]]></entry>
+	<entry key="cache.whenExhaustedAction"><![CDATA[true]]></entry>
+	<entry key="cache.key.separator"><![CDATA[|$|]]></entry>
+</properties>

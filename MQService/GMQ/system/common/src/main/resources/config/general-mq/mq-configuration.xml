@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>  
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="queue.hostname"><![CDATA[10.10.87.91]]></entry>
+	<entry key="queue.username"><![CDATA[rabbitmq]]></entry>
+	<entry key="queue.password"><![CDATA[rmq@123]]></entry>
+	<entry key="queue.port"><![CDATA[15672]]></entry>
+	<entry key="queue.channel.perconnection"><![CDATA[10]]></entry>
+	<entry key="queue.prefix"><![CDATA[-]]></entry>
+	<entry key="queue.delay.prefix"><![CDATA[Delay-]]></entry>
+	<entry key="exchange.naming.pattern"><![CDATA[([a-zA-Z0-9-]*)]]></entry>
+	<entry key="queue.default.maxAttmpt"><![CDATA[5]]></entry>
+	<entry key="queue.default.nxtAttmptDly"><![CDATA[0]]></entry>
+	<entry key="queue.default.msgPriorityAttmpt"><![CDATA[2]]></entry>
+	<entry key="queue.default.routingkey"><![CDATA[Default]]></entry>
+	<entry key="queue.max.priority"><![CDATA[100]]></entry>
+	<entry key="message.processing.time"><![CDATA[60]]></entry>
+	<entry key="message.processing.time.unit"><![CDATA[2]]></entry>
+</properties>

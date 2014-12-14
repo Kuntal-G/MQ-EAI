@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	id="WebApp_ID" version="2.5">
+
+	<display-name>ARC Universal Message Queue</display-name>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
+
+
+	<!-- Servlet Classes -->
+
+	<servlet>
+		<!-- This startup handler will be used for initializing all Pool(DB,Cache) etc during Application start up -->
+		<servlet-name>startup-servlet</servlet-name>
+		<servlet-class>com.arc.mq.service.servlet.StartupHandler</servlet-class>
+		<load-on-startup>0</load-on-startup>
+	</servlet>
+
+	<servlet>
+		<servlet-name>jersey-serlvet</servlet-name>
+		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+		<init-param>
+			<param-name>com.sun.jersey.config.property.packages</param-name>
+			<param-value>com.arc.mq..rest</param-value>
+		</init-param>
+		<init-param>
+			<param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet>
+		<servlet-name>logging-servlet</servlet-name>
+		<servlet-class>com.arc.mq.service.servlet.LoggingHandler</servlet-class>
+	</servlet>
+
+	<!-- Servlet Mappings -->
+	<servlet-mapping>
+		<servlet-name>jersey-serlvet</servlet-name>
+		<url-pattern>/service/*</url-pattern>
+	</servlet-mapping>
+
+
+	<servlet-mapping>
+		<servlet-name>logging-servlet</servlet-name>
+		<url-pattern>/logging</url-pattern>
+	</servlet-mapping>
+
+	<!-- This Filter required for Performance Testing using Performance Filter Servlet : Comment this in Production.-->
+
+	<filter>
+		<filter-name>performance</filter-name>
+		<filter-class>com.arc.mq.service.servlet.PerformanceLogFilter</filter-class>
+		<init-param>
+			<param-name>url-filter</param-name>
+			<param-value>/v1/rest/*</param-value>
+		</init-param>
+		<init-param>
+			<param-name>log-category</param-name>
+			<param-value>PerformanceLog</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>performance</filter-name>
+		<url-pattern>/service/*</url-pattern>
+	</filter-mapping>
+
+
+
+</web-app>

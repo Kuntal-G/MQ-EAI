@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>  
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+
+<!-- Error Code and Message can be modified/updated -->
+
+<properties>
+	<!-- System Error -->
+	<entry key="code.101"><![CDATA[Unexpected system error occurred]]></entry>
+	<entry key="code.102"><![CDATA[Resource not found]]></entry>
+	<entry key="code.103"><![CDATA[Unable to load configuration]]></entry>
+	<entry key="code.104"><![CDATA[Unable to read configuration]]></entry>
+	<entry key="code.105"><![CDATA[Unable to execute]]></entry>
+	<entry key="code.106"><![CDATA[Request is invalid]]></entry>
+	<entry key="code.107"><![CDATA[Email not delivered]]></entry>
+
+	<!-- Application Error -->
+	<entry key="code.201"><![CDATA[Data cannot be processed due to integrity violation]]></entry>
+	<entry key="code.202"><![CDATA[Data processing Failed]]></entry>
+	<entry key="code.203"><![CDATA[Duplicate cannot be accessed]]></entry>
+	<entry key="code.204"><![CDATA[Data pattern mismatch]]></entry>
+	<entry key="code.205"><![CDATA[Unable to Transform data]]></entry>
+	<entry key="code.206"><![CDATA[Unable to process the Transaction]]></entry>
+	<entry key="code.207"><![CDATA[Rabbit Queue Data Fetch Problem]]></entry>
+	<entry key="code.208"><![CDATA[Data not found in Redis]]></entry>
+	<entry key="code.209"><![CDATA[Unable to parse Json]]></entry>
+
+
+	<!-- Validation Error -->
+	<entry key="code.301"><![CDATA[Required value is missing]]></entry>
+	<entry key="code.302"><![CDATA[Invalid data format]]></entry>
+	<entry key="code.303"><![CDATA[Incorrect Json message format]]></entry>
+	<entry key="code.304"><![CDATA[Unable to map Json properly]]></entry>
+	<entry key="code.305"><![CDATA[Date Format is incorrect]]></entry>
+	<entry key="code.306"><![CDATA[Number Format is incorrect]]></entry>
+	<entry key="code.307"><![CDATA[Mandatory field missing]]></entry>
+	<entry key="code.308"><![CDATA[Not a valid Name or Value]]></entry>
+	<entry key="code.309"><![CDATA[Please give the valid data for the input parameter]]></entry>
+
+	<!-- Generic Error -->
+	<entry key="code.404"><![CDATA[Not a valid URI for UMQ Service :]]></entry>
+	<entry key="code.401"><![CDATA[Not Authorized to access]]></entry>
+	<entry key="code.400"><![CDATA[Request is semantically incorrect ]]></entry>
+	<entry key="code.500"><![CDATA[Internal System Error]]></entry>
+</properties>

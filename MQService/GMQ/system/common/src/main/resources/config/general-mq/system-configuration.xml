@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>  
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="system.database.type"><![CDATA[${system.database.type}]]></entry>
+	<entry key="system.supported.language.default"><![CDATA[US]]></entry>
+	<entry key="system.smtp.host"><![CDATA[${system.smtp.host}]]></entry>
+	<entry key="system.smtp.port"><![CDATA[${system.smtp.port}]]></entry>
+	<entry key="system.smtp.username"><![CDATA[${system.smtp.username}]]></entry>
+	<entry key="system.smtp.password"><![CDATA[${system.smtp.password}]]></entry>
+	<entry key="system.notification.mail"><![CDATA[${system.notification.mail}]]></entry>
+	<entry key="system.message.separator"><![CDATA[|<<@$>>|]]></entry>
+	<entry key="system.channel.cleaner.delay"><![CDATA[120000]]></entry>
+	<entry key="system.message.batch.size"><![CDATA[100]]></entry>
+	</properties>

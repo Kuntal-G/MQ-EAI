@@ -1,0 +1,33 @@
+#First install the jmxtools jar in local maven repo,by changing the -Dfile location to where you have this jar
+
+mvn install:install-file -Dfile=/home/kuntal/practice/jmxtools-1.2.jar -DgroupId=com.sun.jdmk -DartifactId=jmxtools -Dversion=1.2 -Dpackaging=jar
+
+#Now do a maven update for common module
+
+
+# For Key Expire to work, Redis conf need to have Ex
+notify-keyspace-events Ex 
+And then start redis-server with to redis.conf file.
+
+
+#Maven goal commands
+//For building environment specific build. After -P it could be dev(by Default),stag or prod. 
+ clean package  -P stag 
+
+//For debug
+clean install -X
+
+//For skipping Test,either check Skin test in Eclipse or do this in command
+clean install  -Dmaven.test.skip=true
+ 
+//For PMD
+clean pmd:pmd
+ 
+//For Cobertura
+clean cobertura:cobertura
+ 
+//For CheckStyle
+clean checkstyle:checkstyle
+ 
+//For Sonar
+  clean soanr:sonar

@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.general.mq</groupId>
+	<artifactId>system</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>General Message Queue System Master</name>
+
+	<!-- Jar version management -->
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.plugin.version>2.5.1</maven.compiler.plugin.version>
+		<maven.war.plugin.version>2.4</maven.war.plugin.version>
+		<rabbitmq.version>3.3.4</rabbitmq.version>
+		<jersey.version>1.8</jersey.version>
+		<jedis.version>2.4.2</jedis.version>
+		<mysqlclient.version>5.1.30</mysqlclient.version>
+		<jackson.version>1.9.3</jackson.version>
+		<mail.version>1.4.4</mail.version>
+		<servletapi.version>2.5</servletapi.version>
+		<bonecp.version>0.8.0.RELEASE</bonecp.version>
+		<logback.version>1.1.2</logback.version>
+		<codec.version>1.9</codec.version>
+		<slf4j.version>1.6.6</slf4j.version>
+		<sonar.version>2.4</sonar.version>
+		<surefire.version>2.10</surefire.version>
+		<cobertura.version>2.4</cobertura.version>
+		<pmd.version>2.3</pmd.version>
+		<checkstyle.version>3.0</checkstyle.version>
+		<junit.version>4.4</junit.version>
+		<project.root>${basedir}/</project.root>
+	</properties>
+
+	<modules>
+		<module>common</module>
+		<module>data</module>
+		<module>service</module>
+	</modules>
+
+
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>${maven.compiler.plugin.version}</version>
+					<configuration>
+						<source>1.7</source>
+						<target>1.7</target>
+					</configuration>
+				</plugin>
+				<plugin>
+					<artifactId>maven-war-plugin</artifactId>
+					<version>${maven.war.plugin.version}</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-surefire-report-plugin</artifactId>
+					<version>2.10</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.12.4</version>
+					<configuration>
+						<includes>
+						<!-- Run Only Test Suite at diffrent module (common, data & service)  -->
+							<include>**/UMQCommonTestSuite.class</include>
+							<include>**/UMQDataTestSuite.class</include>
+							<include>**/UMQServiceTestSuite.class</include>
+						</includes>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>sonar-maven-plugin</artifactId>
+					<version>${sonar.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>cobertura-maven-plugin</artifactId>
+					<version>${cobertura.version}</version>
+					<configuration>
+						<formats>
+							<format>xml</format>
+							<format>html</format>
+						</formats>
+					</configuration>
+					<executions>
+						<execution>
+							<phase>install</phase>
+							<goals>
+								<goal>cobertura</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-pmd-plugin</artifactId>
+					<version>2.5</version>
+					<inherited>true</inherited>
+					<configuration>
+						<targetJdk>1.7</targetJdk>
+						<!-- to skip PMD check set "true" -->
+						<skip>fasle</skip>
+						<!-- break the build when PMD found error, set "true" -->
+						<failOnViolation>true</failOnViolation>
+						<failurePriority>4</failurePriority>
+						<verbose>true</verbose>
+						<rulesets>
+							<!-- rule sets file -->
+							<ruleset>${basedir}/../utilities/conf/pmd-rules.xml</ruleset>
+						</rulesets>
+					</configuration>
+					<!-- maven goals to execute -->
+					<executions>
+						<execution>
+							<id>check</id>
+							<goals>
+								<goal>check</goal>
+							</goals>
+						</execution>
+						<execution>
+							<id>cpd-check</id>
+							<goals>
+								<goal>cpd-check</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+
+	<!-- Cobertura and PMD Checkstyle Quality -->
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>cobertura-maven-plugin</artifactId>
+				<version>${cobertura.version}</version>
+				<configuration>
+					<formats>
+						<format>html</format>
+						<format>xml</format>
+					</formats>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jxr-plugin</artifactId>
+				<version>${pmd.version}</version>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>${checkstyle.version}</version>
+			</plugin>
+		</plugins>
+	</reporting>
+	<profiles>
+		<!-- Better to Set this in maven settings.xml file.Use this Profile to 
+			Run Sonar : mvn clean install -Psonar sonar:sonar -->
+		<profile>
+			<id>sonar</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+
+				<!-- Example for H2 -->
+				<!--<sonar.jdbc.url>jdbc:h2:tcp://localhost:9092/sonar</sonar.jdbc.url> -->
+				<!-- Example for H2 -->
+				<sonar.jdbc.url>jdbc:mysql://localhost:3306/sonar</sonar.jdbc.url>
+				<sonar.jdbc.username>sonar</sonar.jdbc.username>
+				<sonar.jdbc.password>sonar</sonar.jdbc.password>
+				<!-- Optional URL to server. Default value is http://localhost:9000 -->
+				<sonar.host.url>http://localhost:9000 </sonar.host.url>
+			</properties>
+		</profile>
+		<profile>
+			<!-- This profile is used for debugging test cases using maven -->
+			<!-- command: mvn test -Ddebug or mvn package -Ddebug or mvn install -Ddebug -->
+			<id>maven-debug</id>
+			<activation>
+				<property>
+					<name>debug</name>
+				</property>
+			</activation>
+			<properties>
+				<maven.surefire.debug>-Xdebug
+					-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=1234
+					-Djava.compiler=NONE</maven.surefire.debug>
+			</properties>
+		</profile>
+		<!-- Profiles based Enviroment build configuration -->
+		<profile>
+			<id>dev</id>
+			<!-- Dev profile is active by default -->
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<!-- Specifies the build profile id, which is used to find out the correct 
+					properties file. This is not actually necessary for this example, but it 
+					can be used for other purposes. -->
+				<env>dev</env>
+			</properties>
+
+			<build>
+				<filters>
+					<!-- Specifies path to the properties file, which contains profile specific 
+						configuration. -->
+					<filter>${project.root}/common/src/main/resources/profiles/config-${env}.properties</filter>
+				</filters>
+				<resources>
+					<!-- Placeholders found from files located in the configured resource 
+						directories are replaced with values found from the profile specific configuration 
+						files. -->
+					<resource>
+						<filtering>true</filtering>
+						<directory>${project.root}/common/src/main/resources</directory>
+						<!-- You can also include only specific files found from the configured 
+							directory or exclude files. -->
+						<!-- <includes> <include></include> </includes> <excludes> <exclude></exclude> 
+							</excludes> -->
+					</resource>
+				</resources>
+			</build>
+		</profile>
+		<profile>
+
+			<id>stag</id>
+
+			<properties>
+				<!-- Specifies the build profile id, which is used to find out the correct 
+					properties file. This is not actually necessary for this example, but it 
+					can be used for other purposes. -->
+				<env>stag</env>
+			</properties>
+
+			<build>
+				<filters>
+					<!-- Specifies path to the properties file, which contains profile specific 
+						configuration. -->
+					<filter>${project.root}/common/src/main/resources/profiles/config-${env}.properties</filter>
+				</filters>
+				<resources>
+					<!-- Placeholders found from files located in the configured resource 
+						directories are replaced with values found from the profile specific configuration 
+						files. -->
+					<resource>
+						<filtering>true</filtering>
+						<directory>${project.root}/common/src/main/resources</directory>
+						<!-- You can also include only specific files found from the configured 
+							directory or exclude files. -->
+						<!-- <includes> <include></include> </includes> <excludes> <exclude></exclude> 
+							</excludes> -->
+					</resource>
+				</resources>
+			</build>
+		</profile>
+		<profile>
+
+			<id>prod</id>
+
+			<properties>
+				<!-- Specifies the build profile id, which is used to find out the correct 
+					properties file. This is not actually necessary for this example, but it 
+					can be used for other purposes. -->
+				<env>prod</env>
+			</properties>
+
+			<build>
+				<filters>
+					<!-- Specifies path to the properties file, which contains profile specific 
+						configuration. -->
+					<filter>${project.root}/common/src/main/resources/profiles/config-${env}.properties</filter>
+				</filters>
+				<resources>
+					<!-- Placeholders found from files located in the configured resource 
+						directories are replaced with values found from the profile specific configuration 
+						files. -->
+					<resource>
+						<filtering>true</filtering>
+						<directory>${project.root}/common/src/main/resources</directory>
+						<!-- You can also include only specific files found from the configured 
+							directory or exclude files. -->
+						<!-- <includes> <include></include> </includes> <excludes> <exclude></exclude> 
+							</excludes> -->
+					</resource>
+				</resources>
+			</build>
+		</profile>
+
+
+	</profiles>
+
+	<!-- + Developers + -->
+	<developers>
+		<developer>
+			<id>kuntal</id>
+			<name>Kuntal Ganguly</name>
+			<email>gangulykuntal1986@gmail.com</email>
+			<roles>
+				<role>Big Data Analyst</role>
+			</roles>
+		</developer>
+	</developers>
+	<description>This is the root POM file for General Message Queue System application</description>
+</project>
