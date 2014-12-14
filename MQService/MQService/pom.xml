@@ -5,7 +5,7 @@
 	<artifactId>MQService</artifactId>
 	<packaging>war</packaging>
 	<version>1.0-SNAPSHOT</version>
-	<name>MQService WebApp</name>
+	<name>Active MQService WebApp</name>
 
 	<repositories>
 		<repository>
