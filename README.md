@@ -7,7 +7,7 @@ This a restful service for producing and consuming Blob data (pdf,doc,etc)  with
 
 
 #GMQ: 
-This is a restful service for general purpose queueing application based on RabbitMQ and Redis.A simple ExtJS based UI 
+This is a restful service for general purpose message queueing application based on RabbitMQ and Redis.A simple ExtJS based UI 
 for registering Producer & Consumer and also to view the history of  processed  message.
 
 
