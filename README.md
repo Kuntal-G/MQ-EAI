@@ -12,4 +12,4 @@ for registering Producer & Consumer and also to view the history of  processed  
 
 
 #Mule-RnD: 
-This consists of few Rnd carried out recent version of Mule ESB based on Real world use case.
+This consists of few Rnd carried out with recent version of Mule ESB based on Real world use case.
