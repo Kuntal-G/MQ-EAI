@@ -25,6 +25,7 @@ public class ErrorConfig {
 	public static final String CODE_207= instance.getProperty("code.207",ErrorConfig.ERROR_CONFIGURATION_XML);
 	public static final String CODE_208= instance.getProperty("code.208",ErrorConfig.ERROR_CONFIGURATION_XML);
 	public static final String CODE_209= instance.getProperty("code.209",ErrorConfig.ERROR_CONFIGURATION_XML);
+	public static final String CODE_210= instance.getProperty("code.210",ErrorConfig.ERROR_CONFIGURATION_XML);
 	
 	
 	//Validation Error Code Related

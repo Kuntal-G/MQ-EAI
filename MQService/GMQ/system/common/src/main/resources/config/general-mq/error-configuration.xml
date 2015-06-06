@@ -23,6 +23,7 @@
 	<entry key="code.207"><![CDATA[Rabbit Queue Data Fetch Problem]]></entry>
 	<entry key="code.208"><![CDATA[Data not found in Redis]]></entry>
 	<entry key="code.209"><![CDATA[Unable to parse Json]]></entry>
+	<entry key="code.210"><![CDATA[History Dump Queue Size is full]]></entry>
 
 
 	<!-- Validation Error -->

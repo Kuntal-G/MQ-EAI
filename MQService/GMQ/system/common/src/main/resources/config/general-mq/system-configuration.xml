@@ -11,4 +11,8 @@
 	<entry key="system.message.separator"><![CDATA[|<<@$>>|]]></entry>
 	<entry key="system.channel.cleaner.delay"><![CDATA[120000]]></entry>
 	<entry key="system.message.batch.size"><![CDATA[100]]></entry>
+	<entry key="dump.queue.size"><![CDATA[500]]></entry>
+	<entry key="dump.thread.sleep"><![CDATA[2000]]></entry>
+	<entry key="batch.msg.dump.size"><![CDATA[100]]></entry>
+	
 	</properties>

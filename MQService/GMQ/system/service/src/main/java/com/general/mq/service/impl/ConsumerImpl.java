@@ -40,6 +40,7 @@ import com.general.mq.dto.MsgChannelDto;
 import com.general.mq.dto.QueueDetailDto;
 import com.general.mq.management.QueueChannel;
 import com.general.mq.management.QueueChannelFactory;
+import com.general.mq.monitoring.QueueDump;
 import com.general.mq.rest.rqrsp.AcknowledgeDetail;
 import com.general.mq.rest.rqrsp.Acknowledgement;
 import com.general.mq.rest.rqrsp.ConsumerRequest;
@@ -312,12 +313,13 @@ public class ConsumerImpl implements IConsumer{
 		}else{
 			historyDto.status=StatusConfig.SUCCESS_ACK_STATUS;
 		}
+		//Dump to History Table through Queue asynchronously.Queue will be processed by DBDump background job for batch update.
 		History historyDomain=new History();
 		historyTransformer.syncToDomain(historyDto, historyDomain);
-		if(batchHistory!=null){
-			batchHistory.add(historyDomain);
-		}else{
-			historyDao.saveHistory(historyDomain);
+		try {
+			QueueDump.accessQueue().put(historyDomain);
+		} catch (InterruptedException e) {
+			throw new ApplicationException(e,ApplicationCode.DUMP_QUEUE_FULL);
 		}
 		MQLogger.l.info("Leaving ConsumerImpl.saveHistory");
 	}

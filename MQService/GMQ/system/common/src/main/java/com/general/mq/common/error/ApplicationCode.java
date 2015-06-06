@@ -12,7 +12,8 @@ public enum ApplicationCode implements ErrorCode {
 	TRANSACTION_FAILURE(206,ErrorConfig.CODE_206),
 	RMQ_DATA_ACCESS_FAIL(207,ErrorConfig.CODE_207),
 	REDIS_DATA_NOT_FOUND(208,ErrorConfig.CODE_208),
-	JSON_PARSE_ERROR(209,ErrorConfig.CODE_208);
+	JSON_PARSE_ERROR(209,ErrorConfig.CODE_208),
+	DUMP_QUEUE_FULL(210,ErrorConfig.CODE_210);
 	
 
 	private final int number;

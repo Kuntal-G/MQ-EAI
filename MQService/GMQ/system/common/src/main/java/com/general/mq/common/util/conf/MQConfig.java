@@ -66,6 +66,9 @@ public  class MQConfig {
 	public static final String DEFAULT_SUPPORTED_LANGUAGE = instance.getProperty("system.supported.language.default",MQConfig.SYSTEM_CONFIGURATION_XML);
 	public static final long CHNL_CLENR_DELAY = instance.getLongProperty("system.channel.cleaner.delay",MQConfig.SYSTEM_CONFIGURATION_XML);
 	public static final long MSG_BATCH_SIZE= instance.getLongProperty("system.message.batch.size",MQConfig.SYSTEM_CONFIGURATION_XML);
+	public static final int DUMP_QUEUE_SIZE = instance.getIntegerProperty("dump.queue.size",MQConfig.SYSTEM_CONFIGURATION_XML);
+	public static final int DUMP_BATCH_SIZE = instance.getIntegerProperty("batch.msg.dump.size",MQConfig.SYSTEM_CONFIGURATION_XML);
+	public static final long DUMP_THREAD_SLEEP= instance.getLongProperty("dump.thread.sleep",MQConfig.SYSTEM_CONFIGURATION_XML);
 	
 	
 	//Mail
